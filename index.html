@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOASIS Technology | Empowering Digital Evolution</title>
+    <title>KOASIS Company Limited | Customers Always Come First</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM CDN -->
@@ -50,6 +50,11 @@
             display: inline-block;
             vertical-align: middle;
         }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 <body class="text-slate-800 bg-white selection:bg-lime-200">
@@ -68,6 +73,7 @@
             const [lang, setLang] = useState('en');
             const [scrolled, setScrolled] = useState(false);
             const [orbStyle, setOrbStyle] = useState({ transform: 'translate(50vw, 50vh) scale(1)', opacity: 0.6 });
+            const [currentCase, setCurrentCase] = useState(0);
             const logoUrl = "https://raw.githubusercontent.com/MrMAXVW/koasis/main/logo.svg";
             
             const mousePos = useRef({ x: 0, y: 0 });
@@ -93,14 +99,10 @@
                 const updateOrb = () => {
                     const viewWidth = window.innerWidth;
                     const viewHeight = window.innerHeight;
-                    
-                    // Base position influenced by scroll (Parallax)
                     const baseY = (viewHeight * 0.4) + (scrollPos.current * 0.2);
                     const baseX = (viewWidth * 0.7);
-
-                    // Check distance from cursor to orb center
                     const dx = mousePos.current.x - baseX;
-                    const dy = mousePos.current.y - (baseY - scrollPos.current * 0); // Simplified screen pos
+                    const dy = mousePos.current.y - (baseY - scrollPos.current * 0);
                     const distance = Math.sqrt(dx * dx + dy * dy);
                     
                     let scale = 1;
@@ -111,7 +113,6 @@
                     if (distance < 400) {
                         scale = 1 + (1 - distance / 400) * 0.8;
                         opacity = 0.5 + (1 - distance / 400) * 0.4;
-                        // Slight repulsion effect
                         offsetX = (dx / distance) * -20;
                         offsetY = (dy / distance) * -20;
                     }
@@ -124,11 +125,17 @@
 
                 window.addEventListener('scroll', handleScroll);
                 window.addEventListener('mousemove', handleMouseMove);
-                updateOrb(); // Initial position
+                updateOrb();
+
+                // Carousel Timer
+                const timer = setInterval(() => {
+                    setCurrentCase(prev => (prev + 1) % 3);
+                }, 5000);
 
                 return () => {
                     window.removeEventListener('scroll', handleScroll);
                     window.removeEventListener('mousemove', handleMouseMove);
+                    clearInterval(timer);
                 };
             }, [lang]);
 
@@ -147,24 +154,30 @@
                             { name: 'HuaGo AI Box', desc: 'Next-gen scanning powered by artificial intelligence.', icon: 'smart_toy' },
                             { name: 'Overhead Scanner', desc: 'Versatile non-contact document capture.', icon: 'center_focus_strong' },
                             { name: 'Book Scanner', desc: 'Preserving knowledge with high-res imaging.', icon: 'menu_book' },
-                            { name: 'Storage', desc: 'Secure and scalable high-performance storage.', icon: 'database' }
+                            { name: 'Storage', desc: 'Secure and scalable high-performance storage.', icon: 'database' },
+                            { name: 'Custom Hardware', desc: 'Consult with our experts for specialized requirements.', icon: 'more_horiz' }
                         ]
                     },
                     solutions: {
                         title: 'Smart Solutions',
                         items: [
-                            { name: 'AI Capture', desc: 'Advanced AI-powered data extraction and document classification.', icon: 'psychology' },
-                            { name: 'Front End Capture', desc: 'Efficient point-of-entry document digitization solutions.', icon: 'input' },
-                            { name: 'SharePoint Alt', desc: 'Modern alternatives for enterprise collaboration and storage.', icon: 'rebase_edit' },
-                            { name: 'Document Management', desc: 'Comprehensive systems for organizing and retrieving records.', icon: 'description' },
-                            { name: 'Security', desc: 'Enterprise-grade encryption and access control for your assets.', icon: 'enhanced_encryption' },
-                            { name: 'RPA', desc: 'Robotic Process Automation to eliminate repetitive manual tasks.', icon: 'bolt' },
-                            { name: 'BI', desc: 'Business Intelligence tools to visualize your data insights.', icon: 'monitoring' }
+                            { name: 'AI Capture', desc: 'Advanced AI-powered data extraction and classification.', icon: 'psychology' },
+                            { name: 'Front End Capture', desc: 'Efficient point-of-entry document digitization.', icon: 'input' },
+                            { name: 'SharePoint Alt', desc: 'Modern alternatives for collaboration and storage.', icon: 'rebase_edit' },
+                            { name: 'Document Management', desc: 'Comprehensive systems for organizing records.', icon: 'description' },
+                            { name: 'Security', desc: 'Enterprise-grade encryption and access control.', icon: 'enhanced_encryption' },
+                            { name: 'RPA', desc: 'Robotic Process Automation for repetitive tasks.', icon: 'bolt' },
+                            { name: 'BI', desc: 'Business Intelligence tools for data insights.', icon: 'monitoring' },
+                            { name: 'And More', desc: 'Bespoke software development for your unique needs.', icon: 'add_circle' }
                         ]
                     },
                     cases: {
-                        title: 'Our Success Cases',
-                        text: 'Over the years, we have helped 500+ enterprises digitize their workflow, reducing operational costs by up to 40% while ensuring 100% data compliance.'
+                        title: 'Success Stories',
+                        items: [
+                            { company: 'Global Finance Corp', text: 'Digitized over 10 million archival records with 99.9% accuracy using AI Capture.', icon: 'account_balance' },
+                            { company: 'Public Health Institute', text: 'Optimized patient record workflow, reducing retrieval time from hours to seconds.', icon: 'medical_services' },
+                            { company: 'City Logistics Hub', text: 'Implemented RPA and smart scanners to automate 80% of shipping documentation.', icon: 'local_shipping' }
+                        ]
                     },
                     contact: {
                         title: 'Contact Us', 
@@ -186,7 +199,8 @@
                             { name: 'HuaGo AI 影像盒子', desc: '人工智慧驅動的新一代掃描技術。', icon: 'smart_toy' },
                             { name: 'Unis 高拍儀', desc: '多功能非接觸式文件擷取。', icon: 'center_focus_strong' },
                             { name: '圖書掃描器', desc: '細緻的高解析影像，守護知識傳承。', icon: 'menu_book' },
-                            { name: '存儲設備', desc: '安全、可擴展的高性能存儲方案。', icon: 'database' }
+                            { name: '存儲設備', desc: '安全、可擴展的高性能存儲方案。', icon: 'database' },
+                            { name: '更多硬體', desc: '與我們的專家諮詢，定製專屬硬體方案。', icon: 'more_horiz' }
                         ]
                     },
                     solutions: {
@@ -198,12 +212,17 @@
                             { name: '文件管理系統', desc: '全面的紀錄組織與檢索管理系統。', icon: 'description' },
                             { name: '資訊安全', desc: '企業級數據加密與嚴格的資產訪問控制。', icon: 'enhanced_encryption' },
                             { name: 'RPA 自動化', desc: '機器人流程自動化，消除重複性手動工作。', icon: 'bolt' },
-                            { name: 'BI 商業智能', desc: '商業智能工具，將數據轉化為可視化洞察。', icon: 'monitoring' }
+                            { name: 'BI 商業智能', desc: '商業智能工具，將數據轉化為可視化洞察。', icon: 'monitoring' },
+                            { name: '更多方案', desc: '為您的獨特需求提供定制化軟件開發服務。', icon: 'add_circle' }
                         ]
                     },
                     cases: {
                         title: '成功案例',
-                        text: '多年來，我們已協助 500 多家企業實現工作流程數位化，將營運成本降低多達 40%，同時確保數據合規。'
+                        items: [
+                            { company: '環球金融集團', text: '利用 AI 擷取技術將超過一千萬份存檔文件數位化，準確率達 99.9%。', icon: 'account_balance' },
+                            { company: '公共衛生中心', text: '優化病歷工作流程，將檢索時間從數小時縮短至幾秒鐘。', icon: 'medical_services' },
+                            { company: '城市物流樞紐', text: '實施 RPA 與智能掃描器，實現 80% 運輸文件的自動化處理。', icon: 'local_shipping' }
+                        ]
                     },
                     contact: {
                         title: '聯絡我們', 
@@ -257,10 +276,12 @@
                     {/* Equipment Section */}
                     <section id="equipment" className="relative py-24 bg-white border-t border-slate-100 z-10">
                         <div className="container mx-auto px-6">
-                            <h2 className="reveal-on-scroll text-left text-4xl md:text-5xl font-black text-emerald-950 uppercase tracking-tighter mb-16">
-                                {t.equipment.title}
-                                <div className="w-20 h-2 bg-lime-400 mt-4 rounded-full"></div>
-                            </h2>
+                            <div className="text-center mb-16 reveal-on-scroll">
+                                <h2 className="text-4xl md:text-5xl font-black text-emerald-950 uppercase tracking-tighter">
+                                    {t.equipment.title}
+                                </h2>
+                                <div className="w-20 h-2 bg-lime-400 mx-auto mt-4 rounded-full"></div>
+                            </div>
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 {t.equipment.items.map((item, idx) => (
                                     <div key={idx} className="reveal-on-scroll p-10 rounded-[2.5rem] bg-slate-50 border border-transparent hover:border-emerald-100 hover:bg-white hover:shadow-2xl transition-all">
@@ -278,11 +299,16 @@
                     {/* Solutions Section */}
                     <section id="solutions" className="relative py-24 bg-emerald-950 text-white z-10">
                         <div className="container mx-auto px-6">
-                            <h2 className="reveal-on-scroll text-left text-4xl md:text-5xl font-black uppercase tracking-tighter mb-20">{t.solutions.title}</h2>
+                            <div className="text-center mb-20 reveal-on-scroll">
+                                <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter">
+                                    {t.solutions.title}
+                                </h2>
+                                <div className="w-20 h-2 bg-lime-400 mx-auto mt-4 rounded-full"></div>
+                            </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                                 {t.solutions.items.map((item, idx) => (
-                                    <div key={idx} className="reveal-on-scroll p-8 rounded-[2rem] bg-emerald-900/50 border border-emerald-800 hover:bg-emerald-800 transition-all text-left">
-                                        <div className="p-4 bg-white/10 rounded-2xl text-lime-300 w-fit mb-6 flex items-center justify-center">
+                                    <div key={idx} className="reveal-on-scroll p-8 rounded-[2rem] bg-emerald-900/50 border border-emerald-800 hover:bg-emerald-800 transition-all text-center">
+                                        <div className="p-4 bg-white/10 rounded-2xl text-lime-300 w-fit mx-auto mb-6 flex items-center justify-center">
                                             <Icon name={item.icon} size="40px" />
                                         </div>
                                         <h4 className="font-black text-xl mb-3">{item.name}</h4>
@@ -293,18 +319,44 @@
                         </div>
                     </section>
 
-                    {/* Success Case Section */}
-                    <section className="relative py-24 bg-emerald-50 z-10">
+                    {/* Success Case Carousel Section */}
+                    <section className="relative py-32 bg-emerald-50 z-10">
                         <div className="container mx-auto px-6">
-                            <div className="reveal-on-scroll max-w-4xl bg-white p-12 md:p-20 rounded-[4rem] shadow-2xl text-left border-l-8 border-lime-400 relative overflow-hidden">
-                                <div className="flex gap-1 mb-8">
-                                    {[...Array(5)].map((_, i) => <Icon name="star" key={i} size="24px" className="text-lime-400" />)}
+                            <div className="text-center mb-16 reveal-on-scroll">
+                                <h2 className="text-4xl md:text-5xl font-black text-emerald-950 uppercase tracking-tighter">{t.cases.title}</h2>
+                                <div className="w-20 h-2 bg-lime-400 mx-auto mt-4 rounded-full"></div>
+                            </div>
+
+                            <div className="max-w-4xl mx-auto overflow-hidden reveal-on-scroll">
+                                <div 
+                                    className="carousel-track" 
+                                    style={{ transform: `translateX(-${currentCase * 100}%)` }}
+                                >
+                                    {t.cases.items.map((item, idx) => (
+                                        <div key={idx} className="min-w-full px-4">
+                                            <div className="bg-white p-12 md:p-16 rounded-[4rem] shadow-sm border border-emerald-100 text-center border-b-8 border-b-lime-400 relative">
+                                                <div className="w-20 h-20 bg-emerald-50 rounded-3xl flex items-center justify-center text-emerald-600 mx-auto mb-8">
+                                                    <Icon name={item.icon} size="40px" />
+                                                </div>
+                                                <h3 className="text-emerald-950 font-black text-2xl mb-6 uppercase tracking-widest">{item.company}</h3>
+                                                <p className="text-2xl md:text-3xl text-emerald-950 font-medium leading-tight mb-8 italic">"{item.text}"</p>
+                                                <div className="flex justify-center gap-1">
+                                                    {[...Array(5)].map((_, i) => <Icon name="star" key={i} size="20px" className="text-lime-400" />)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                                <h2 className="text-emerald-950 font-black text-xl mb-4 uppercase tracking-widest">{t.cases.title}</h2>
-                                <p className="text-2xl md:text-4xl text-emerald-950 font-bold leading-tight mb-10 italic">"{t.cases.text}"</p>
-                                <div className="flex gap-8 opacity-40 font-black text-xl uppercase italic">
-                                    <span>Kodak</span><span>HuaGo</span><span>Unis</span>
-                                </div>
+                            </div>
+
+                            <div className="flex justify-center gap-3 mt-10">
+                                {t.cases.items.map((_, idx) => (
+                                    <button 
+                                        key={idx}
+                                        onClick={() => setCurrentCase(idx)}
+                                        className={`h-3 rounded-full transition-all duration-300 ${currentCase === idx ? 'w-10 bg-emerald-600' : 'w-3 bg-emerald-200'}`}
+                                    ></button>
+                                ))}
                             </div>
                         </div>
                     </section>
