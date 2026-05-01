@@ -30,7 +30,7 @@ This is the official single-page website for **KOASIS Company Limited**, built w
 This isn't just a tagline; it's the core logic. If you disagree, you're probably in the wrong repo.
 
 ## 👤 Author
-Developed for **Max兄** (KOASIS Company Limited).
+Developed by Maxviw Chiu for KOASIS Company Limited.
 
 ---
 
